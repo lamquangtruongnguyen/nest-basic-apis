@@ -9,12 +9,16 @@ import {
   Query,
   ParseIntPipe,
   ValidationPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ValidateCreateUserPipe } from './pipes/validate-create-user/validate-create-user.pipe';
+import { AuthGuard } from './guards/auth/auth.guard';
 
 @Controller('users') // {baseURL}/users
+@UseGuards(AuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   //Order matters, /interns should be before /:id
@@ -31,7 +35,7 @@ export class UsersController {
 
   @Post() // POST /users
   create(
-    @Body(ValidationPipe)
+    @Body(ValidationPipe, ValidateCreateUserPipe)
     createUserDto: CreateUserDto,
   ) {
     return this.usersService.create(createUserDto);
