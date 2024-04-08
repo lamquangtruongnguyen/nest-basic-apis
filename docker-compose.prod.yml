@@ -1,0 +1,14 @@
+services:
+  nestjs_api:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - '3001:3001'
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+    volumes:
+      - ./src:/app/src
+  postgres_db:
+    image: postgres
